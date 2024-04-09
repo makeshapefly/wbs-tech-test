@@ -1,0 +1,23 @@
+version: '3.8'
+services:
+  technical-test-api:
+    container_name: technical-test-api
+    build: ./technical-test-api
+    image: wbs-tech-test:latest
+    ports:
+      - 8080:8080
+    networks:
+      - spring-network
+  app:
+    container_name: technical-test-frontend
+    environment:
+      - REACT_APP_HOST_IP_ADDRESS=http://localhost:8080/date/
+    image: technical-test-frontend
+    build:
+      context: ./technical-test-frontend
+      target: development
+    ports:
+      - 3000:3000
+networks:
+  spring-network:
+    driver: bridge
