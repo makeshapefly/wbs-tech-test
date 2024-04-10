@@ -27,7 +27,6 @@ const KpiDataTable = () => {
     };
   }, []);
 
-
   const getData = (date, day) => {
     setDayNo('Day ' + day)
     fetch(process.env.REACT_APP_HOST_IP_ADDRESS + date)
@@ -146,7 +145,7 @@ const KpiDataTable = () => {
     {
       headerName: '',
       children: [
-        { field: 'teamName', type: 'team', cellStyle: { color: 'black', 'backgroundColor': '#F1F8C3', fontWeight: 'bold' }, filter: true },
+        { field: 'teamName', type: 'team', cellStyle: { color: 'black', 'backgroundColor': '#F1F8C3', fontWeight: 'bold' }, filter: 'true' },
       ]
     },
     {
