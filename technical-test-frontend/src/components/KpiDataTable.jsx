@@ -45,13 +45,13 @@ const KpiDataTable = () => {
     }, {});
 
     let waccSet = new Set()
-    let factory_utilizationSet = new Set()
+    let factoryUtilizationSet = new Set()
     let scoresSet = new Set()
-    let employee_engagementSet = new Set()
-    let interest_coverageSet = new Set()
-    let marketing_spend_revSet = new Set()
-    let e_cars_salesSet = new Set()
-    let co2_penaltySet = new Set()
+    let employeeEngagementSet = new Set()
+    let interestCoverageSet = new Set()
+    let marketingSpendRevSet = new Set()
+    let eCarsSalesSet = new Set()
+    let co2PenaltySet = new Set()
 
     //add scores for each team from source data
     const keys = Object.keys(data)
@@ -64,46 +64,51 @@ const KpiDataTable = () => {
         switch (kpi) {
           case 'wacc':
             kpiValue.waccValue = Number(kpiData[item].value)
+            waccSet.add(Number(kpiData[item].value))
             break;
           case 'factory_utilization':
             kpiValue.factoryUtilisationValue = Number(kpiData[item].value)
+            factoryUtilizationSet.add(Number(kpiData[item].value))
             break;
           case 'scores':
             kpiValue.scoresValue = Number(kpiData[item].value)
+            scoresSet.add(Number(kpiData[item].value))
             break;
           case 'employee_engagement':
             kpiValue.employeeEngagementValue = Number(kpiData[item].value)
+            employeeEngagementSet.add(Number(kpiData[item].value))
             break;
           case 'interest_coverage':
             kpiValue.interestCoverageValue = Number(kpiData[item].value)
+            interestCoverageSet.add(Number(kpiData[item].value))
             break;
           case 'marketing_spend_rev':
             kpiValue.marketingSpendRevValue = Number(kpiData[item].value)
+            marketingSpendRevSet.add(Number(kpiData[item].value))
             break;
           case 'e_cars_sales':
             kpiValue.eCarsSalesValue = Number(kpiData[item].value)
+            eCarsSalesSet.add(Number(kpiData[item].value))
             break;
           case 'co2_penalty':
             kpiValue.co2PenaltyValue = Number(kpiData[item].value)
+            co2PenaltySet.add(Number(kpiData[item].value))
             break;
         }
-
-        eval(kpi + 'Set.add(Number(' + kpiData[item].value + '))')
-        //eval('kpiValue.' + kpi + 'Value= Number(kpiData[item].value)')
       }
     })
 
-    console.log(JSON.stringify(rowData))
+    console.log(JSON.stringify(rowData)) //left in for the demo
 
 
     const scoresArray = Array.from(scoresSet).sort((a, b) => b - a)
     const waccArray = Array.from(waccSet).sort((a, b) => b - a)
-    const factoryUtilisationArray = Array.from(factory_utilizationSet).sort((a, b) => b - a)
-    const employeeEngagementArray = Array.from(employee_engagementSet).sort((a, b) => b - a)
-    const interestCoverageArray = Array.from(interest_coverageSet).sort((a, b) => b - a)
-    const marketingSpendRevArray = Array.from(marketing_spend_revSet).sort((a, b) => b - a)
-    const eCarsSalesArray = Array.from(e_cars_salesSet).sort((a, b) => b - a)
-    const co2PenaltyArray = Array.from(co2_penaltySet).sort((a, b) => b - a)
+    const factoryUtilisationArray = Array.from(factoryUtilizationSet).sort((a, b) => b - a)
+    const employeeEngagementArray = Array.from(employeeEngagementSet).sort((a, b) => b - a)
+    const interestCoverageArray = Array.from(interestCoverageSet).sort((a, b) => b - a)
+    const marketingSpendRevArray = Array.from(marketingSpendRevSet).sort((a, b) => b - a)
+    const eCarsSalesArray = Array.from(eCarsSalesSet).sort((a, b) => b - a)
+    const co2PenaltyArray = Array.from(co2PenaltySet).sort((a, b) => b - a)
 
     //set column data in grid
     let tableRows = []
@@ -152,49 +157,49 @@ const KpiDataTable = () => {
       ],
     },
     {
-      headerName: 'WACC',
+      headerName: 'WACC (%)',
       children: [
-        { headerName: 'Rank', field: 'scoresRank', type: 'rank' },
-        { headerName: 'Value', field: 'scoresValue', filter: 'agNumberColumnFilter' }
+        { headerName: 'Rank', field: 'waccRank', type: 'rank' },
+        { headerName: 'Value', field: 'waccValue', filter: 'agNumberColumnFilter' }
       ],
     },
     {
-      headerName: 'Factory Utilisation',
+      headerName: 'Factory Utilisation (%)',
       children: [
         { headerName: 'Rank', field: 'factoryUtilisationRank', type: 'rank' },
         { headerName: 'Value', field: 'factoryUtilisationValue' }
       ],
     },
     {
-      headerName: 'Employee Engagement',
+      headerName: 'Employee Engagement (%)',
       children: [
         { headerName: 'Rank', field: 'employeeEngagementRank', type: 'rank' },
         { headerName: 'Value', field: 'employeeEngagementValue' }
       ],
     },
     {
-      headerName: 'Interest Coverage',
+      headerName: 'Interest Coverage (x X)',
       children: [
         { headerName: 'Rank', field: 'interestCoverageRank', type: 'rank' },
         { headerName: 'Value', field: 'interestCoverageValue' }
       ],
     },
     {
-      headerName: 'Cumulative Market Spend/Rev',
+      headerName: 'Cumulative Market Spend/Rev (USD)',
       children: [
         { headerName: 'Rank', field: 'marketingSpendRevRank', type: 'rank' },
         { headerName: 'Value', field: 'marketingSpendRevValue', filter: 'agNumberColumnFilter' }
       ],
     },
     {
-      headerName: 'eCar Sales',
+      headerName: 'eCar Sales (Units)',
       children: [
         { headerName: 'Rank', field: 'eCarsSalesRank', type: 'rank' },
         { headerName: 'Value', field: 'eCarsSalesValue', filter: 'agNumberColumnFilter' }
       ],
     },
     {
-      headerName: 'C02 Penalty',
+      headerName: 'C02 Penalty (USD)',
       children: [
         { headerName: 'Rank', field: 'co2PenaltyRank', type: 'rank' },
         { headerName: 'Value', field: 'co2PenaltyValue', filter: 'agNumberColumnFilter' }
