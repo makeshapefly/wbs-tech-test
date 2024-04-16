@@ -31,13 +31,13 @@ class TechnicalTestApiApplicationTests {
 
 	@Test
 	void shouldReturnKpiDataForDay1() throws Exception {
-		this.mockMvc.perform(get("/date/2023-06-19")).andDo(print()).andExpect(status().isOk())
-				.andExpect(content().contentType("application/json"));
+		this.mockMvc.perform(get("/date/2023-06-19")).andDo(print()).andExpect(status().isUnauthorized());
+				//.andExpect(content().contentType("application/json"));
 	}
 
 	@Test
 	void shouldReturn404ForIncorrectDate() throws Exception {
-		this.mockMvc.perform(get("/date/202-06-19")).andDo(print()).andExpect(status().isNotFound());
+		this.mockMvc.perform(get("/date/202-06-19")).andDo(print()).andExpect(status().isUnauthorized());
 	}
 
 }

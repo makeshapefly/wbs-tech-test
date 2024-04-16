@@ -8,7 +8,7 @@ import "../styles/styles.css";
 
 const KpiDataTable = () => {
   const containerStyle = useMemo(() => ({ height: '100%', width: '100%' }), []);
-  const gridStyle = useMemo(() => ({ height: '100%', width: '100%' }), []);
+  const gridStyle = useMemo(() => ({ height: 1000, width: '100%' }), []);
 
   const TEAM_NAMES = ["fovro", "Fastun", "Nyxx", "CarSpa", "Motion", "Worthwheel", "Carzio", "Rollovo", "iAuto", "VroomTime", "Kar", "EliteTechs", "Carz", "MileMode", "Automotiq", "RYDI", "EvolutionAuto", "Automovo", "ROBOH", "rimovo", "ottobi", "Evi", "Rusted", "Cjio", "NitroRide", "HXH", "SpeedLabs", "TenQ", "Caraxa", "Blazers", "DriveSwitch", "GIIQ", "Teuso", "Hoqa", "AutoInfinite", "vusk", "DentCenter", "Turbo", "evCU", "Electronically", "Drivat", "Torque", "Drift", "Carvato", "Rush", "Matic", "Wheelic", "Slidyn", "Pitpo", "caralo", "Drivesly", "Xuad", "CarLeap", "Tazox", "Amxu", "Honkli"];
 
@@ -29,11 +29,22 @@ const KpiDataTable = () => {
 
   const getData = (date, day) => {
     setDayNo('Day ' + day)
-    fetch(process.env.REACT_APP_HOST_IP_ADDRESS + date)
+    fetch(process.env.REACT_APP_HOST_IP_ADDRESS + date, {
+      method: 'GET',
+      headers: {
+        'Api-key': 'mykey',
+      },
+    })
       .then((response) => response.json())
       .then((data) => {
         transformData(data);
       });
+  }
+
+  const currencyFormatter = (currency, sign) => {
+    var sansDec = currency.toFixed(2);
+    var formatted = sansDec.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return sign + `${formatted}`;
   }
 
   const transformData = (data) => {
@@ -145,21 +156,21 @@ const KpiDataTable = () => {
     {
       headerName: '',
       children: [
-        { field: 'teamName', type: 'team', cellStyle: { color: 'black', 'backgroundColor': '#F1F8C3', fontWeight: 'bold' }, filter: 'true' },
+        { field: 'teamName', type: 'team', cellStyle: { color: 'black', 'backgroundColor': '#FFF', fontWeight: 'bold' }, filter: 'true', floatingFilter: true, suppressHeaderMenuButton: true, },
       ]
     },
     {
       headerName: 'Scores',
       children: [
         { headerName: 'Rank', field: 'scoresRank', type: 'rank' },
-        { headerName: 'Value', field: 'scoresValue', filter: 'agNumberColumnFilter' }
+        { headerName: 'Value', field: 'scoresValue' }
       ],
     },
     {
       headerName: 'WACC (%)',
       children: [
         { headerName: 'Rank', field: 'waccRank', type: 'rank' },
-        { headerName: 'Value', field: 'waccValue', filter: 'agNumberColumnFilter' }
+        { headerName: 'Value', field: 'waccValue' }
       ],
     },
     {
@@ -187,21 +198,21 @@ const KpiDataTable = () => {
       headerName: 'Cumulative Market Spend/Rev (USD)',
       children: [
         { headerName: 'Rank', field: 'marketingSpendRevRank', type: 'rank' },
-        { headerName: 'Value', field: 'marketingSpendRevValue', filter: 'agNumberColumnFilter' }
+        { headerName: 'Value', field: 'marketingSpendRevValue', valueFormatter: params => currencyFormatter(params.data.marketingSpendRevValue, "$"), }
       ],
     },
     {
       headerName: 'eCar Sales (Units)',
       children: [
         { headerName: 'Rank', field: 'eCarsSalesRank', type: 'rank' },
-        { headerName: 'Value', field: 'eCarsSalesValue', filter: 'agNumberColumnFilter' }
+        { headerName: 'Value', field: 'eCarsSalesValue' }
       ],
     },
     {
       headerName: 'C02 Penalty (USD)',
       children: [
         { headerName: 'Rank', field: 'co2PenaltyRank', type: 'rank' },
-        { headerName: 'Value', field: 'co2PenaltyValue', filter: 'agNumberColumnFilter' }
+        { headerName: 'Value', field: 'co2PenaltyValue', valueFormatter: params => currencyFormatter(params.data.co2PenaltyValue, "$") }
       ],
     }
   ]);
@@ -235,6 +246,7 @@ const KpiDataTable = () => {
           rowData={rowData}
           columnDefs={colDefs}
           defaultColDef={defaultColDef}
+          enableFilter='true'
         />
       </div>
     </div>

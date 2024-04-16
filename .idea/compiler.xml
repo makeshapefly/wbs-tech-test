@@ -6,15 +6,17 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="technical-test-api" />
+        <module name="spring-api" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="spring-api" target="17" />
       <module name="technical-test-api" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="spring-api" options="-parameters" />
       <module name="technical-test-api" options="-parameters" />
     </option>
   </component>
