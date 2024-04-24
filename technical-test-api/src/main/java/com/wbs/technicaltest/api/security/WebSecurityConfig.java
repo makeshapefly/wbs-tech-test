@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -21,8 +22,7 @@ public class WebSecurityConfig {
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
 
         //add the ApiKeyFilter to the security chain
-        http.addFilterBefore(new ApiKeyFilter(),
-                AnonymousAuthenticationFilter.class);
+        http.addFilterBefore(new ApiKeyFilter(), AnonymousAuthenticationFilter.class);
         http.cors(cors -> cors.configurationSource(request -> {
             CorsConfiguration configuration = new CorsConfiguration();
             configuration.setAllowedOrigins(Arrays.asList("*"));
@@ -32,9 +32,9 @@ public class WebSecurityConfig {
         }));
 
         //configure the security chain to authenticate all endpoints
-        //except the /error
         http.authorizeHttpRequests(requests -> requests
                 .requestMatchers(HttpMethod.OPTIONS, "/**").authenticated()
+                .requestMatchers(HttpMethod.GET, "/v3/api-docs**", "/v3/api-docs/**").permitAll()
                 .requestMatchers(new AntPathRequestMatcher("/error")).permitAll()
                         .anyRequest().authenticated()
         );

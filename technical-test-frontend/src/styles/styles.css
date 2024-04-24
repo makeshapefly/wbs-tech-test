@@ -43,20 +43,19 @@
 }
 .ag-header-cell.ag-column-first {
     font-size: 24px;
-    color: black;
+    color: #000;
     font-weight: bold;
-    background-color: #FFF;
-}
-.ag-floating-filter.ag-column-first {
 
 }
 
-.ag-header-group-cell.ag-column-last {
-
-}
-.ag-header-cell.ag-column-last {
-
-}
-.ag-floating-filter.ag-column-last {
-
-}
+.ag-theme-quartz {
+    --ag-foreground-color: rgb(126, 46, 132);
+    --ag-background-color: rgb(249, 245, 227);
+    --ag-header-foreground-color: rgb(0, 0, 0);
+    --ag-header-background-color: #dee2e6;
+    --ag-odd-row-background-color: rgb(0, 0, 0, 0.03);
+    --ag-header-column-resize-handle-color: rgb(0, 0, 0);
+  
+    --ag-font-size: 17px;
+    --ag-font-family: monospace;
+  }

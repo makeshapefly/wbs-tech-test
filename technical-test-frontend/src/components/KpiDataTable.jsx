@@ -5,10 +5,13 @@ import { AgGridReact } from 'ag-grid-react'; // AG Grid Component
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the grid
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Optional Theme applied to the grid
 import "../styles/styles.css";
+import { auth } from '../auth/config'
+import { useNavigate } from 'react-router-dom'
 
 const KpiDataTable = () => {
-  const containerStyle = useMemo(() => ({ height: '100%', width: '100%' }), []);
-  const gridStyle = useMemo(() => ({ height: 1000, width: '100%' }), []);
+  const containerStyle = useMemo(() => ({ height: '100%', width: '100%', marginTop: 40 }), []);
+  const gridStyle = useMemo(() => ({ height: 1000, width: '100%', marginTop: 20 }), []);
+  const navigate = useNavigate();
 
   const TEAM_NAMES = ["fovro", "Fastun", "Nyxx", "CarSpa", "Motion", "Worthwheel", "Carzio", "Rollovo", "iAuto", "VroomTime", "Kar", "EliteTechs", "Carz", "MileMode", "Automotiq", "RYDI", "EvolutionAuto", "Automovo", "ROBOH", "rimovo", "ottobi", "Evi", "Rusted", "Cjio", "NitroRide", "HXH", "SpeedLabs", "TenQ", "Caraxa", "Blazers", "DriveSwitch", "GIIQ", "Teuso", "Hoqa", "AutoInfinite", "vusk", "DentCenter", "Turbo", "evCU", "Electronically", "Drivat", "Torque", "Drift", "Carvato", "Rush", "Matic", "Wheelic", "Slidyn", "Pitpo", "caralo", "Drivesly", "Xuad", "CarLeap", "Tazox", "Amxu", "Honkli"];
 
@@ -18,21 +21,55 @@ const KpiDataTable = () => {
   const columnTypes = useMemo(() => {
     return {
       rank: {
-        width: 100,
+        width: 90,
+        wrapHeaderText: 'true'
+      },
+      co2Penalty: {
+        width: 140,
+        wrapHeaderText: 'true'
+      },
+      factoryUtilisation: {
+        width: 110,
+        wrapHeaderText: 'true'
+      },
+      employeeEngagement: {
+        width: 130,
+        wrapHeaderText: 'true'
+      },
+      interestCoverage: {
+        width: 125,
+        wrapHeaderText: 'true'
+      },
+      marketSpend: {
+        width: 160,
+        wrapHeaderText: 'true'
+      },
+      wacc: {
+        width: 90,
+        wrapHeaderText: 'true'
       },
       team: {
-        width: 200,
+        width: 150,
         fontSize: 40,
       },
     };
   }, []);
+
+  useEffect(() => {
+    let currentUser = auth.currentUser
+    if (currentUser != null) {
+      getData('2023-06-19', 1)
+    } else {
+      navigate("/");
+    }
+  }, [])
 
   const getData = (date, day) => {
     setDayNo('Day ' + day)
     fetch(process.env.REACT_APP_HOST_IP_ADDRESS + date, {
       method: 'GET',
       headers: {
-        'Api-key': 'mykey',
+        'Api-key': process.env.REACT_APP_API_KEY,
       },
     })
       .then((response) => response.json())
@@ -108,9 +145,6 @@ const KpiDataTable = () => {
       }
     })
 
-    console.log(JSON.stringify(rowData)) //left in for the demo
-
-
     const scoresArray = Array.from(scoresSet).sort((a, b) => b - a)
     const waccArray = Array.from(waccSet).sort((a, b) => b - a)
     const factoryUtilisationArray = Array.from(factoryUtilizationSet).sort((a, b) => b - a)
@@ -141,13 +175,11 @@ const KpiDataTable = () => {
     setRowData(tableRows)
   }
 
-  useEffect(() => {
-    getData('2023-06-19', 1);
-  }, []);
-
   const defaultColDef = useMemo(() => {
     return {
       width: 100,
+      wrapHeaderText: true,
+      autoHeaderHeight: true,
     };
   }, []);
 
@@ -167,38 +199,38 @@ const KpiDataTable = () => {
       ],
     },
     {
-      headerName: 'WACC (%)',
+      headerName: 'WACC (%)', type: 'rank',
       children: [
         { headerName: 'Rank', field: 'waccRank', type: 'rank' },
-        { headerName: 'Value', field: 'waccValue' }
+        { headerName: 'Value', field: 'waccValue', type: 'wacc' }
       ],
     },
     {
       headerName: 'Factory Utilisation (%)',
       children: [
         { headerName: 'Rank', field: 'factoryUtilisationRank', type: 'rank' },
-        { headerName: 'Value', field: 'factoryUtilisationValue' }
+        { headerName: 'Value', field: 'factoryUtilisationValue', type: 'factoryUtilisation' }
       ],
     },
     {
       headerName: 'Employee Engagement (%)',
       children: [
         { headerName: 'Rank', field: 'employeeEngagementRank', type: 'rank' },
-        { headerName: 'Value', field: 'employeeEngagementValue' }
+        { headerName: 'Value', field: 'employeeEngagementValue', type: 'employeeEngagement' }
       ],
     },
     {
       headerName: 'Interest Coverage (x X)',
       children: [
         { headerName: 'Rank', field: 'interestCoverageRank', type: 'rank' },
-        { headerName: 'Value', field: 'interestCoverageValue' }
+        { headerName: 'Value', field: 'interestCoverageValue', type: 'interestCoverage' }
       ],
     },
     {
       headerName: 'Cumulative Market Spend/Rev (USD)',
       children: [
         { headerName: 'Rank', field: 'marketingSpendRevRank', type: 'rank' },
-        { headerName: 'Value', field: 'marketingSpendRevValue', valueFormatter: params => currencyFormatter(params.data.marketingSpendRevValue, "$"), }
+        { headerName: 'Value', field: 'marketingSpendRevValue', type: 'marketSpend', valueFormatter: params => currencyFormatter(params.data.marketingSpendRevValue, "$"), }
       ],
     },
     {
@@ -212,13 +244,14 @@ const KpiDataTable = () => {
       headerName: 'C02 Penalty (USD)',
       children: [
         { headerName: 'Rank', field: 'co2PenaltyRank', type: 'rank' },
-        { headerName: 'Value', field: 'co2PenaltyValue', valueFormatter: params => currencyFormatter(params.data.co2PenaltyValue, "$") }
+        { headerName: 'Value', field: 'co2PenaltyValue', type: 'co2Penalty', valueFormatter: params => currencyFormatter(params.data.co2PenaltyValue, "$") }
       ],
     }
   ]);
-
+  
   return (
     <div style={containerStyle}>
+      <p>All Teams Results across KPIs</p>
       <div>
         <Dropdown>
           <Dropdown.Toggle variant="success" id="dropdown-basic">
@@ -247,6 +280,7 @@ const KpiDataTable = () => {
           columnDefs={colDefs}
           defaultColDef={defaultColDef}
           enableFilter='true'
+          ensureDomOrder='true'
         />
       </div>
     </div>

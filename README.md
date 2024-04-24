@@ -56,15 +56,13 @@ Due to time constraints, the following changes would be pending.
 
 ### Application design / code
 1. There are a small number of backend tests, but no frontend tests.
-2. It would be nice to have an Open API/Swagger definition for the backend
-   (for a real app).
-3. During the npm build process there are some deprecated dependencies and some known vulnerabilities.
+2. During the npm build process there are some deprecated dependencies and some known vulnerabilities.
 In a production grade app there would likely be some DAST/SAST container scanning.
-4. The API is exposed on http not https.
-5. The API is not secured. In a robust, production ready app, you might consider using oauth2 and an Idp.
-For a simple app, an API key could be used to provide additional security.
-6. The React app is not using Typescript (when I ran create-react-app for the boilerplate I forgot to 
+3. The API is exposed on http not https.
+4. The React app is not using Typescript (when I ran create-react-app for the boilerplate I forgot to 
 include the typescript argument and didn't want to restart). A bigger app would undoubtedly benefit from stronger typing.
+5. Secrets management.
+6. App is not responsive.
 
 ### Application features
 1. In the existing KPI application, teams of equal rank were marked with an '=' symbol in the Rank column.
@@ -72,5 +70,4 @@ I could not see any logical reason for this (although I'm not saying there isn't
 I have therefore replaced the '=' with the actual rank, so you will see multiple teams with the same rank.
 2. Styling. I have applied minimal styling. React bootstrap is installed and could be used to easily style further.
 3. Pivot feature. The data grid could be transposed to give KPIs as rows, teams as columns.
-4. Possible use of charting for visual appeal or insights on data.
-5. Could include also the day\date rankings\values in the data grid.
+4. Logout feature / allow logins to persist across browser sessions (not the Google Auth default)

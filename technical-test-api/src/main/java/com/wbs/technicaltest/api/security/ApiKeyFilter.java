@@ -22,7 +22,7 @@ public class ApiKeyFilter extends OncePerRequestFilter {
 
         boolean isApiKeyValid = validateAPIKey(reqApiKey);
 
-        if(!isApiKeyValid) {
+        if(!isApiKeyValid && !request.getRequestURI().startsWith("/v3/api-docs") && !request.getRequestURI().startsWith("/swagger-ui")) {
             //return 401 Unauthorized
             response.sendError(HttpStatus.UNAUTHORIZED.value(), "Invalid API Key");
             return;
